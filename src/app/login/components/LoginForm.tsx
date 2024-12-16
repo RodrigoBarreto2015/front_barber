@@ -1,23 +1,68 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { Button } from './Button'
+import api from '@/lib/axios'
+import { classifyEmailOrPhone, validateAndTransformEmailOrPhone } from '@/util/classifyEmailOrPhone';
+
+interface LoginDto{
+    phone?: number;
+    email?: string;
+    password: string;
+}
 
 const LoginForm = () => {
+
+    const [emailOrPhone, setEmailOrPhone] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("")
+
+    const handleLogin = async (e: React.FormEvent)=>{
+        e.preventDefault();
+
+        setError("")
+
+        try{
+
+            const classifiedData = classifyEmailOrPhone(emailOrPhone);
+
+            const loginData = 
+            {
+                ...classifiedData,
+                password
+            }
+
+            const response = await api.post(
+                "/auth/login",
+                loginData
+            )
+
+            console.log(response.data)
+
+            
+        }catch(err){
+            setError("Erro no login")
+        }
+    }
+
+
     return (
-        <form className="mt-8 space-y-6">
+        <form className="mt-8 space-y-6" onSubmit={handleLogin}>
             <div className="rounded-md shadow-sm -space-y-px">
                 <div className='mb-4'>
-                    <label htmlFor="identifier" className="sr-only">
+                    <label htmlFor="emailOrPhone" className="sr-only">
                         Email or Phone Number
                     </label>
                     <input
-                        id="identifier"
-                        name="identifier"
+                        id="emailOrPhone"
+                        name="emailOrPhone"
                         type="text"
                         required
                         className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-700 placeholder-gray-500 text-white bg-gray-800 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm"
                         placeholder="Email or Phone Number"
+                        aria-required
+                        value={emailOrPhone}
+                        onChange={(e)=> setEmailOrPhone(e.target.value)}
                     />
                 </div>
                 <div>
@@ -31,6 +76,9 @@ const LoginForm = () => {
                         required
                         className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-700 placeholder-gray-500 text-white bg-gray-800 rounded-b-md focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm"
                         placeholder="Password"
+                        aria-required
+                        value={password}
+                        onChange={(e)=> setPassword(e.target.value)}
                     />
                 </div>
             </div>
