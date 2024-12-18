@@ -29,14 +29,14 @@ export default function CreateAccountForm() {
       const response = await api.post(
         "/user",
         {...user, phone: JSON.parse(phone.toString())}
-      )
+      ).catch(function (error) {
+        alert(error.response);
+      })
 
-      console.log(response.data)
-      alert("sucesso")
+      console.log(response)
 
     } catch (err) {
       console.log(err)
-      alert(err)
     }
   }
 
@@ -80,7 +80,7 @@ export default function CreateAccountForm() {
           <input
             id="phone"
             name="phone"
-            type="number"
+            type="tel"
             className="appearance-none rounded-none relative block w-full mb-4 px-3 py-2 border border-gray-700 placeholder-gray-500 text-white bg-gray-800 focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm"
             placeholder="(85) xxxx-xxxx)"
             value={phone !== undefined ? phone.toString() : 0} // Corrige o problema
