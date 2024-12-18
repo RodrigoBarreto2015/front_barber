@@ -1,7 +1,6 @@
 import React from 'react'
 import Image from "next/image";
-import LoginForm from './components/LoginForm';
-import Link from 'next/link';
+import CreateAccountForm from './components/CreateForm';
 
 const LoginPage = () => {
   return (
@@ -19,13 +18,10 @@ const LoginPage = () => {
             Welcome to Our Barbershop
           </h2>
           <p className="mt-2 text-sm text-gray-400">
-            Sign in to book your next appointment
-          </p>
-          <p className="mt-2 text-sm text-gray-400">
-            Or <Link href="../signUp">Create Account</Link>
+            Create account to book your next appointment
           </p>
         </div>
-        <LoginForm />
+        <CreateAccountForm />
       </div>
     </div>
   )

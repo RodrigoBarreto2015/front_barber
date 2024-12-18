@@ -1,9 +1,9 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Button } from './Button'
+import { Button } from '../../components/Button'
 import api from '@/lib/axios'
-import { classifyEmailOrPhone, validateAndTransformEmailOrPhone } from '@/util/classifyEmailOrPhone';
+import { classifyEmailOrPhone } from '@/util/classifyEmailOrPhone';
 
 interface LoginDto{
     phone?: number;
@@ -23,9 +23,7 @@ const LoginForm = () => {
         setError("")
 
         try{
-
             const classifiedData = classifyEmailOrPhone(emailOrPhone);
-
             const loginData = 
             {
                 ...classifiedData,
