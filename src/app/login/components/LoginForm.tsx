@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { Button } from '../../components/Button'
 import api from '@/lib/axios'
 import { classifyEmailOrPhone } from '@/util/classifyEmailOrPhone';
+import { showToast } from '@/util/toast';
 
 interface LoginDto{
     phone?: number;
@@ -34,11 +35,11 @@ const LoginForm = () => {
                 "/auth/login",
                 loginData
             )
-
-            console.log(response.data)
-
             
+            showToast({ type: "success", message: "Logado com sucesso" });
+
         }catch(err){
+            console.log(err)
             setError("Erro no login")
         }
     }
@@ -100,7 +101,6 @@ const LoginForm = () => {
                     </a>
                 </div>
             </div>
-
             <div>
                 <Button type="submit">
                     Sign in
