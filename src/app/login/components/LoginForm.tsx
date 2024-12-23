@@ -2,46 +2,38 @@
 
 import React, { useState } from 'react'
 import { Button } from '../../components/Button'
-import api from '@/lib/axios'
 import { classifyEmailOrPhone } from '@/util/classifyEmailOrPhone';
 import { showToast } from '@/util/toast';
-
-interface LoginDto{
-    phone?: number;
-    email?: string;
-    password: string;
-}
+import { useRouter } from 'next/navigation';
+import { UserLogin } from '@/service/login.Service';
 
 const LoginForm = () => {
+
+    const router = useRouter()
 
     const [emailOrPhone, setEmailOrPhone] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("")
 
-    const handleLogin = async (e: React.FormEvent)=>{
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
 
         setError("")
 
-        try{
-            const classifiedData = classifyEmailOrPhone(emailOrPhone);
-            const loginData = 
-            {
-                ...classifiedData,
-                password
-            }
-
-            const response = await api.post(
-                "/auth/login",
-                loginData
-            )
-            
-            showToast({ type: "success", message: "Logado com sucesso" });
-
-        }catch(err){
-            console.log(err)
-            setError("Erro no login")
+        const classifiedData = classifyEmailOrPhone(emailOrPhone);
+        const loginData =
+        {
+            ...classifiedData,
+            password
         }
+
+        UserLogin(loginData).then(() => {
+            showToast({ type: "success", message: "Logado com sucesso" });
+            router.push('/')
+        }).catch((error) => {
+            console.log(error)
+            setError(error)
+        });
     }
 
 
@@ -61,7 +53,7 @@ const LoginForm = () => {
                         placeholder="Email or Phone Number"
                         aria-required
                         value={emailOrPhone}
-                        onChange={(e)=> setEmailOrPhone(e.target.value)}
+                        onChange={(e) => setEmailOrPhone(e.target.value)}
                     />
                 </div>
                 <div>
@@ -77,7 +69,7 @@ const LoginForm = () => {
                         placeholder="Password"
                         aria-required
                         value={password}
-                        onChange={(e)=> setPassword(e.target.value)}
+                        onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
             </div>

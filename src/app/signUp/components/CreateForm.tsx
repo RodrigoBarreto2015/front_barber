@@ -2,15 +2,8 @@
 
 import { useState } from 'react'
 import { Button } from '../../components/Button'
-import api from '@/lib/axios';
-
-interface CreateUserDto {
-  name: string;
-  phone: bigint;
-  email: string;
-  password: string;
-}
-
+import { CreateUser } from '@/service/user.Service'
+import { showToast } from '@/util/toast'
 
 export default function CreateAccountForm() {
   const [name, setName] = useState('')
@@ -22,22 +15,11 @@ export default function CreateAccountForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    const user: CreateUserDto = { name, email, phone, password }
-
-    try {
-
-      const response = await api.post(
-        "/user",
-        {...user, phone: JSON.parse(phone.toString())}
-      ).catch(function (error) {
-        alert(error.response);
-      })
-
-      console.log(response)
-
-    } catch (err) {
-      console.log(err)
-    }
+    CreateUser({ name, email, phone, password }).then(() => {
+      showToast({ type: "success", message: "Cadastrado com sucesso" });
+    }).catch((error) => {
+      console.log(error)
+    })
   }
 
   return (
